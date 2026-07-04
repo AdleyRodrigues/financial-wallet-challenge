@@ -17,6 +17,9 @@ api/dist
 
 # Manual API test artifacts (curl cookies / temp JSON bodies)
 cookies-*.txt
+body.json
+deposit.json
+transfer.json
 login.json
 login-*.json
 reg.json
@@ -25,5 +28,8 @@ invalid-login.json
 # npm lockfile inside pnpm workspace package (use pnpm-lock.yaml only)
 api/package-lock.json
 
-# Cursor IDE (skills, config local — não versionar)
+# Cursor / Claude / agent (local only — não versionar)
 .cursor/
+AGENTS.md
+CLAUDE.md
+**/.cursorrules

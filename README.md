@@ -1,111 +1,116 @@
 # financial-wallet-challenge
 
-Aplicação full-stack de carteira financeira para desafio técnico — monólito modular, TypeScript, NestJS, PostgreSQL e Prisma.
+Aplicação full-stack de carteira financeira — monólito modular com NestJS, Next.js, PostgreSQL e Prisma.
 
-**Etapa atual:** monorepo com pnpm, backend com autenticação e consulta de wallet. Transações financeiras, testes e frontend ainda não implementados.
+## Visão geral
 
-## Tecnologias
+API REST com autenticação JWT em cookie HttpOnly e frontend Next.js para cadastro, login, consulta de saldo, depósito, transferência, histórico e reversão compensatória.
 
-| Camada | Stack |
-|--------|-------|
-| Backend | NestJS, Prisma, JWT + cookie HttpOnly |
-| Frontend | Next.js App Router + Tailwind *(planejado)* |
+## Stack utilizada
+
+| Camada | Tecnologias |
+|--------|-------------|
+| Backend | NestJS, Prisma 7, JWT + cookie HttpOnly |
+| Frontend | Next.js App Router, Material UI |
 | Banco | PostgreSQL (Docker) |
 | Monorepo | pnpm workspaces (`api/` + `web/`) |
 
+## Funcionalidades
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| `POST` | `/auth/register` | Cadastro + wallet com saldo 0 |
+| `POST` | `/auth/login` | Login (cookie HttpOnly) |
+| `POST` | `/auth/logout` | Logout |
+| `GET` | `/auth/me` | Usuário autenticado |
+| `GET` | `/wallet` | Saldo da wallet |
+| `GET` | `/transactions` | Histórico |
+| `POST` | `/transactions/deposit` | Depósito |
+| `POST` | `/transactions/transfer` | Transferência |
+| `POST` | `/transactions/:id/reverse` | Reversão compensatória |
+
+Telas: `/login`, `/register`, `/dashboard`.
+
 ## Como rodar
 
-**Pré-requisitos:** Node.js 20+, pnpm (Corepack), Docker Desktop (virtualização habilitada no BIOS).
+**Pré-requisitos:** Node.js 20+, pnpm (Corepack), Docker Desktop.
 
 ```bash
 corepack enable
 pnpm install
 docker compose up -d postgres
-cp api/.env.example api/.env   # Windows: Copy-Item api/.env.example api/.env
+cp api/.env.example api/.env          # Windows: Copy-Item api/.env.example api/.env
+cp web/.env.example web/.env.local    # Windows: Copy-Item web/.env.example web/.env.local
 pnpm db:generate
 pnpm db:migrate
-pnpm dev:api
+pnpm dev
 ```
 
-> **Portas padrão:**
-> - API: `http://localhost:3333`
-> - Web (futura): `http://localhost:3000`
-> - PostgreSQL (Docker): `localhost:5433`
+Atalho: `pnpm setup` (`pnpm install && pnpm db:generate`).
 
-`pnpm db:migrate` aplica migrations existentes sem prompt (`prisma migrate deploy`). Para criar novas migrations em desenvolvimento: `pnpm db:migrate:dev`.
+| Serviço | URL / porta |
+|---------|-------------|
+| Web | http://localhost:3000 |
+| API | http://localhost:3333 |
+| PostgreSQL (Docker) | localhost:5433 |
 
-Detalhes, troubleshooting e diagrama do fluxo: [local-setup-flow.md](docs/architecture/local-setup-flow.md).
+Apenas API: `pnpm dev:api`. Apenas frontend: `pnpm dev:web`.
 
-**Docker indisponível?** Se aparecer *Virtualization support not detected*, use PostgreSQL local: [setup-local-postgres.md](docs/setup-local-postgres.md).
-
-**Testar Auth + Wallet manualmente:** [manual-tests.md](docs/manual-tests.md).
+**Docker indisponível:** habilite virtualização no BIOS ou use PostgreSQL local na porta `5432` com `api/scripts/setup-local-db.sql` e ajuste `DATABASE_URL` em `api/.env`.
 
 ## Variáveis de ambiente
 
-Copie `api/.env.example` → `api/.env`. Referência completa em `.env.example` (raiz).
+Copie `api/.env.example` → `api/.env` e `web/.env.example` → `web/.env.local`. Referência na raiz: `.env.example`.
 
-| Variável | Descrição |
-|----------|-----------|
-| `DATABASE_URL` | `postgresql://wallet_user:wallet_password@localhost:5433/wallet_db` (Docker) |
-| `JWT_SECRET` | Segredo para assinatura JWT |
-| `PORT` | Porta da API (padrão: `3333`) |
-| `FRONTEND_URL` | Origem CORS do frontend (padrão: `http://localhost:3000`) |
+| Variável | Pacote | Descrição |
+|----------|--------|-----------|
+| `DATABASE_URL` | api | Conexão PostgreSQL |
+| `JWT_SECRET` | api | Segredo do JWT |
+| `PORT` | api | Porta da API (padrão: `3333`) |
+| `FRONTEND_URL` | api | Origem CORS (padrão: `http://localhost:3000`) |
+| `NEXT_PUBLIC_API_URL` | web | URL da API (padrão: `http://localhost:3333`) |
 
-## Funcionalidades (etapa atual)
+## Scripts úteis
 
-| Método | Rota | Status |
-|--------|------|--------|
-| `POST` | `/auth/register` | Implementado |
-| `POST` | `/auth/login` | Implementado |
-| `POST` | `/auth/logout` | Implementado |
-| `GET` | `/auth/me` | Implementado |
-| `GET` | `/wallet` | Implementado |
-| `POST` | `/transactions/*` | *Planejado* |
-| Frontend `web/` | `/login`, `/register`, `/dashboard` | *Planejado* |
+| Comando | Descrição |
+|---------|-----------|
+| `pnpm dev` | API + frontend |
+| `pnpm build` | Build de `api/` e `web/` |
+| `pnpm lint` | ESLint nos dois pacotes |
+| `pnpm test` | Testes unitários da API |
+| `pnpm db:migrate` | Aplica migrations (`migrate deploy`) |
+| `pnpm db:migrate:dev` | Nova migration em desenvolvimento |
+| `pnpm db:studio` | Prisma Studio |
 
-## Estrutura do repositório
+## Decisões técnicas principais
 
-```text
-financial-wallet-challenge/
-├── api/                  # NestJS + Prisma
-├── web/                  # placeholder (Next.js futuro)
-├── docs/architecture/    # documentação técnica detalhada
-├── docker-compose.yml    # PostgreSQL
-├── package.json
-├── pnpm-workspace.yaml
-└── pnpm-lock.yaml
-```
+- **Monólito modular** — um deploy, módulos NestJS bem separados.
+- **pnpm workspaces** — dependências centralizadas na raiz.
+- **Prisma 7 + adapter `pg`** — driver PostgreSQL em runtime.
+- **Decimal para dinheiro** — sem `float` em saldos e transações.
+- **Transações Prisma** — depósito, transferência e reversão atômicos.
+- **Update condicional** — `updateMany` com `balance >= amount` evita gasto duplicado em concorrência.
+- **Reversão compensatória** — histórico preservado; apenas o originador reverte manualmente.
+- **Cookie HttpOnly** — frontend usa `credentials: "include"`; JWT fora do `localStorage`.
+- **Material UI** — interface consistente com tema customizado para contexto financeiro.
 
-## Documentação técnica
+Detalhes e diagramas: [docs/architecture.md](docs/architecture.md).
 
-Documentação detalhada com diagramas Mermaid em `docs/architecture/`:
+## Testes
 
-- [Índice da arquitetura](docs/architecture/README.md)
-- [Visão geral do sistema](docs/architecture/system-overview.md)
-- [Arquitetura do backend](docs/architecture/backend-architecture.md)
-- [Modelagem de dados](docs/architecture/database-model.md)
-- [Fluxo de autenticação](docs/architecture/auth-flow.md)
-- [Operações financeiras](docs/architecture/financial-operations.md) — *planejado*
-- [Fluxo de execução local](docs/architecture/local-setup-flow.md)
+- **Unitários:** 15 testes do `TransactionsService` — `pnpm test`.
+- **Manuais:** fluxo Alice/Bruno em [docs/manual-tests.md](docs/manual-tests.md).
 
-## Decisões em resumo
+## Documentação complementar
 
-- **Monólito modular** — sem microservices, filas, Redis, CQRS ou event sourcing.
-- **pnpm workspaces** — `node_modules` único na raiz, instalação mais rápida e menos duplicação. [Detalhes no índice de arquitetura](docs/architecture/README.md).
-- **`api/` e `web/` na raiz** — estrutura simples para dois pacotes, sem `apps/`.
-- **Prisma 7 + adapter `pg`** — conexão runtime via `@prisma/adapter-pg` e driver `pg` (requisito do Prisma 7).
-- **Backend-first** — regras financeiras na API antes do frontend.
-- **Reversão compensatória** *(planejada)* — restrita ao usuário originador; saldo negativo aceitável.
+- [Arquitetura](docs/architecture.md)
+- [Testes manuais](docs/manual-tests.md)
+- [Requisitos considerados](docs/requirements.md)
 
-## Limitações conhecidas
+## Melhorias futuras
 
-- Docker Desktop exige virtualização habilitada no BIOS (VT-x/AMD-V). Sem isso, use [PostgreSQL local](docs/setup-local-postgres.md).
-- `pnpm db:migrate` depende do PostgreSQL ativo e credenciais corretas em `api/.env`.
-- `web/` é placeholder — frontend não implementado.
-- Transações financeiras modeladas no schema, mas sem endpoints ainda.
-
-## Próximas etapas
-
-1. Implementar `TransactionsModule` (depósito, transferência, reversão, histórico).
-2. Adicionar testes unitários do `TransactionsService`.
-3. Inicializar Next.js em `web/` com UI/UX Pro Max.
+- Testes de integração end-to-end
+- Observabilidade (logs estruturados, métricas)
+- Idempotency keys em operações financeiras
+- Paginação no histórico de transações
+- Middleware Next.js para proteção server-side de rotas

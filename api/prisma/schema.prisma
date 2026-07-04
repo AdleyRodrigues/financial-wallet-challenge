@@ -52,7 +52,7 @@ model Transaction {
   fromWallet            Wallet?           @relation("FromWallet", fields: [fromWalletId], references: [id], onDelete: SetNull)
   toWalletId            String?
   toWallet              Wallet?           @relation("ToWallet", fields: [toWalletId], references: [id], onDelete: SetNull)
-  originalTransactionId String?
+  originalTransactionId String?           @unique
   originalTransaction   Transaction?      @relation("TransactionReversal", fields: [originalTransactionId], references: [id], onDelete: SetNull)
   reversalTransactions  Transaction[]     @relation("TransactionReversal")
   description           String?

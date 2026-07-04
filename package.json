@@ -7,13 +7,14 @@
     "dev": "concurrently \"pnpm dev:api\" \"pnpm dev:web\"",
     "dev:api": "pnpm --filter api start:dev",
     "dev:web": "pnpm --filter web dev",
-    "build": "pnpm --filter api build",
+    "build": "pnpm --filter api build && pnpm --filter web build",
     "test": "pnpm --filter api test",
-    "lint": "pnpm --filter api lint",
+    "lint": "pnpm --filter api lint && pnpm --filter web lint",
     "db:migrate": "pnpm --filter api prisma:migrate:deploy",
     "db:migrate:dev": "pnpm --filter api prisma:migrate:dev",
     "db:generate": "pnpm --filter api prisma:generate",
-    "db:studio": "pnpm --filter api prisma:studio"
+    "db:studio": "pnpm --filter api prisma:studio",
+    "setup": "pnpm install && pnpm db:generate"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
