@@ -1,11 +1,11 @@
 "use client";
 
 import Stack from "@mui/material/Stack";
-import { useDepositForm } from "@/components/dashboard/use-deposit-form";
-import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { useDepositForm } from "@/components/dashboard/deposit-form/use-deposit-form";
+import { Alert } from "@/components/ui/alert/alert";
+import { Button } from "@/components/ui/button/button";
+import { Card } from "@/components/ui/card/card";
+import { Input } from "@/components/ui/input/input";
 
 type DepositFormProps = {
   onSuccess: (balance: string) => void;

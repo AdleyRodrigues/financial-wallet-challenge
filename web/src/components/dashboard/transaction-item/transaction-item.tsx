@@ -13,15 +13,15 @@ import {
   descriptionStyles,
   getAmountStyles,
   listItemStyles,
-} from "@/components/dashboard/transaction-item.styles";
+} from "@/components/dashboard/transaction-item/transaction-item.styles";
 import {
   DIRECTION_LABELS,
   formatTransactionDate,
   getTransactionDescription,
   STATUS_LABELS,
   TYPE_LABELS,
-} from "@/components/dashboard/transaction-item.utils";
-import { Button } from "@/components/ui/button";
+} from "@/components/dashboard/transaction-item/transaction-item.utils";
+import { Button } from "@/components/ui/button/button";
 import { formatCurrency } from "@/lib/currency";
 import type { Transaction } from "@/types/transaction";
 

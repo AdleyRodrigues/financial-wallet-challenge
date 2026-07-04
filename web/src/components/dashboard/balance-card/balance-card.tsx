@@ -9,7 +9,7 @@ import {
   glowDecorationStyles,
   overlineStyles,
   paperStyles,
-} from "@/components/dashboard/balance-card.styles";
+} from "@/components/dashboard/balance-card/balance-card.styles";
 import { formatCurrency } from "@/lib/currency";
 
 type BalanceCardProps = {

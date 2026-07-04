@@ -1,11 +1,11 @@
 "use client";
 
 import Stack from "@mui/material/Stack";
-import { useTransferForm } from "@/components/dashboard/use-transfer-form";
-import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { useTransferForm } from "@/components/dashboard/transfer-form/use-transfer-form";
+import { Alert } from "@/components/ui/alert/alert";
+import { Button } from "@/components/ui/button/button";
+import { Card } from "@/components/ui/card/card";
+import { Input } from "@/components/ui/input/input";
 
 type TransferFormProps = {
   onSuccess: (balance: string) => void;

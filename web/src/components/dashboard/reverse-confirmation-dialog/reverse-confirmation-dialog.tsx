@@ -10,7 +10,7 @@ import {
   contentTextStyles,
   dialogActionsStyles,
   secondaryContentTextStyles,
-} from "@/components/dashboard/reverse-confirmation-dialog.styles";
+} from "@/components/dashboard/reverse-confirmation-dialog/reverse-confirmation-dialog.styles";
 
 type ReverseConfirmationDialogProps = {
   open: boolean;

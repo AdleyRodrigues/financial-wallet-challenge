@@ -2,10 +2,10 @@
 
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
-import { emptyStateStyles } from "@/components/dashboard/transaction-history.styles";
-import { TransactionItem } from "@/components/dashboard/transaction-item";
-import { Card } from "@/components/ui/card";
-import { Loading } from "@/components/ui/loading";
+import { emptyStateStyles } from "@/components/dashboard/transaction-history/transaction-history.styles";
+import { TransactionItem } from "@/components/dashboard/transaction-item/transaction-item";
+import { Card } from "@/components/ui/card/card";
+import { Loading } from "@/components/ui/loading/loading";
 import type { Transaction } from "@/types/transaction";
 
 type TransactionHistoryProps = {

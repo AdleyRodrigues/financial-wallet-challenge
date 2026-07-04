@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { ApiError } from "@/lib/api";
+import { API_ERROR_MESSAGES } from "@/lib/error-catalog";
 import { isValidEmail } from "@/lib/form";
 import { authService } from "@/services/auth-service";
 
@@ -24,19 +25,19 @@ export function useRegisterForm() {
     const errors: { name?: string; email?: string; password?: string } = {};
 
     if (!name.trim()) {
-      errors.name = "Informe seu nome.";
+      errors.name = API_ERROR_MESSAGES.validation.emptyName;
     }
 
     if (!email.trim()) {
-      errors.email = "Informe seu e-mail.";
+      errors.email = API_ERROR_MESSAGES.validation.emptyEmail;
     } else if (!isValidEmail(email)) {
-      errors.email = "Informe um e-mail válido.";
+      errors.email = API_ERROR_MESSAGES.validation.invalidEmail;
     }
 
     if (!password) {
-      errors.password = "Informe uma senha.";
+      errors.password = API_ERROR_MESSAGES.validation.emptyRegisterPassword;
     } else if (password.length < 6) {
-      errors.password = "A senha deve ter pelo menos 6 caracteres.";
+      errors.password = API_ERROR_MESSAGES.validation.shortPassword;
     }
 
     setFieldErrors(errors);
@@ -47,6 +48,7 @@ export function useRegisterForm() {
     event.preventDefault();
     setError(null);
     setSuccess(null);
+    setFieldErrors({});
 
     if (!validate()) {
       return;
@@ -60,15 +62,18 @@ export function useRegisterForm() {
         email: email.trim(),
         password,
       });
-      setSuccess("Conta criada com sucesso. Redirecionando para o login...");
+      setSuccess(API_ERROR_MESSAGES.auth.registerSuccess);
       setTimeout(() => {
         router.push("/login");
       }, 1200);
     } catch (err) {
       if (err instanceof ApiError) {
+        if (err.fieldErrors) {
+          setFieldErrors((previous) => ({ ...previous, ...err.fieldErrors }));
+        }
         setError(err.message);
       } else {
-        setError("Não foi possível criar a conta. Tente novamente.");
+        setError(API_ERROR_MESSAGES.auth.registerFailed);
       }
     } finally {
       setLoading(false);

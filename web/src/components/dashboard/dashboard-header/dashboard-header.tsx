@@ -9,8 +9,8 @@ import {
   headerStackStyles,
   logoutButtonStyles,
   subtitleStyles,
-} from "@/components/dashboard/dashboard-header.styles";
-import { Button } from "@/components/ui/button";
+} from "@/components/dashboard/dashboard-header/dashboard-header.styles";
+import { Button } from "@/components/ui/button/button";
 import type { User } from "@/types/auth";
 
 type DashboardHeaderProps = {

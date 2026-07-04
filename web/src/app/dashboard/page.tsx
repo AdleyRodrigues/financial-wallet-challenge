@@ -9,14 +9,14 @@ import {
   loadingContainerStyles,
   mainStyles,
 } from "@/app/dashboard/dashboard-page.styles";
-import { BalanceCard } from "@/components/dashboard/balance-card";
-import { DashboardHeader } from "@/components/dashboard/dashboard-header";
-import { DepositForm } from "@/components/dashboard/deposit-form";
-import { ReverseConfirmationDialog } from "@/components/dashboard/reverse-confirmation-dialog";
-import { TransactionHistory } from "@/components/dashboard/transaction-history";
-import { TransferForm } from "@/components/dashboard/transfer-form";
-import { Alert } from "@/components/ui/alert";
-import { Loading } from "@/components/ui/loading";
+import { BalanceCard } from "@/components/dashboard/balance-card/balance-card";
+import { DashboardHeader } from "@/components/dashboard/dashboard-header/dashboard-header";
+import { DepositForm } from "@/components/dashboard/deposit-form/deposit-form";
+import { ReverseConfirmationDialog } from "@/components/dashboard/reverse-confirmation-dialog/reverse-confirmation-dialog";
+import { TransactionHistory } from "@/components/dashboard/transaction-history/transaction-history";
+import { TransferForm } from "@/components/dashboard/transfer-form/transfer-form";
+import { Alert } from "@/components/ui/alert/alert";
+import { Loading } from "@/components/ui/loading/loading";
 
 export default function DashboardPage() {
   const {

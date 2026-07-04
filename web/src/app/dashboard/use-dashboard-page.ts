@@ -2,8 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { useTransactionActions } from "@/components/dashboard/use-transaction-actions";
+import { useTransactionActions } from "@/components/dashboard/transaction-actions/use-transaction-actions";
 import { ApiError } from "@/lib/api";
+import { API_ERROR_MESSAGES } from "@/lib/error-catalog";
 import { authService } from "@/services/auth-service";
 import { transactionsService } from "@/services/transactions-service";
 import { walletService } from "@/services/wallet-service";
@@ -37,7 +38,7 @@ export function useDashboardPage() {
       }
       setFeedback({
         type: "error",
-        message: "Não foi possível atualizar o histórico de transações.",
+        message: API_ERROR_MESSAGES.dashboard.refreshTransactionsFailed,
       });
     } finally {
       setTransactionsLoading(false);
@@ -111,7 +112,7 @@ export function useDashboardPage() {
     } catch {
       setFeedback({
         type: "error",
-        message: "Não foi possível sair. Tente novamente.",
+        message: API_ERROR_MESSAGES.dashboard.logoutFailed,
       });
     } finally {
       setLoggingOut(false);

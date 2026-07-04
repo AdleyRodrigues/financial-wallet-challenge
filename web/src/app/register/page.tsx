@@ -1,7 +1,7 @@
 "use client";
 
-import { AuthPageLayout } from "@/components/auth/auth-page-layout";
-import { RegisterForm } from "@/components/auth/register-form";
+import { AuthPageLayout } from "@/components/auth/auth-page-layout/auth-page-layout";
+import { RegisterForm } from "@/components/auth/register-form/register-form";
 
 export default function RegisterPage() {
   return (

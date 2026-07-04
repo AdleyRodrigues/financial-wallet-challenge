@@ -14,7 +14,7 @@ import {
   formPaperStyles,
   headerStackStyles,
   pageMainStyles,
-} from "@/components/auth/auth-page-layout.styles";
+} from "@/components/auth/auth-page-layout/auth-page-layout.styles";
 
 type AuthPageLayoutProps = {
   title: string;

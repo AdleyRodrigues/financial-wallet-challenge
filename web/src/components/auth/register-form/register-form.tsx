@@ -4,11 +4,11 @@ import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import NextLink from "next/link";
-import { footerTextStyles } from "@/components/auth/login-form.styles";
-import { useRegisterForm } from "@/components/auth/use-register-form";
-import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { footerTextStyles } from "@/components/auth/shared/auth-form.styles";
+import { useRegisterForm } from "@/components/auth/register-form/use-register-form";
+import { Alert } from "@/components/ui/alert/alert";
+import { Button } from "@/components/ui/button/button";
+import { Input } from "@/components/ui/input/input";
 
 export function RegisterForm() {
   const {

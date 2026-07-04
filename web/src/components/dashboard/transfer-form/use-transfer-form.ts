@@ -2,14 +2,16 @@
 
 import { FormEvent, useState } from "react";
 import { ApiError } from "@/lib/api";
+import { API_ERROR_MESSAGES } from "@/lib/error-catalog";
 import { parsePositiveAmount } from "@/lib/form";
 import { transactionsService } from "@/services/transactions-service";
 
-type UseDepositFormOptions = {
+type UseTransferFormOptions = {
   onSuccess: (balance: string) => void;
 };
 
-export function useDepositForm({ onSuccess }: UseDepositFormOptions) {
+export function useTransferForm({ onSuccess }: UseTransferFormOptions) {
+  const [receiverEmail, setReceiverEmail] = useState("");
   const [amount, setAmount] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -22,23 +24,32 @@ export function useDepositForm({ onSuccess }: UseDepositFormOptions) {
 
     const parsedAmount = parsePositiveAmount(amount);
 
+    if (!receiverEmail.trim()) {
+      setError(API_ERROR_MESSAGES.validation.emptyReceiverEmail);
+      return;
+    }
+
     if (parsedAmount === null) {
-      setError("Informe um valor maior que zero.");
+      setError(API_ERROR_MESSAGES.validation.invalidAmount);
       return;
     }
 
     setLoading(true);
 
     try {
-      const result = await transactionsService.deposit({ amount: parsedAmount });
-      setSuccess("Depósito realizado com sucesso.");
+      const result = await transactionsService.transfer({
+        receiverEmail: receiverEmail.trim(),
+        amount: parsedAmount,
+      });
+      setSuccess(API_ERROR_MESSAGES.feedback.transferSuccess);
+      setReceiverEmail("");
       setAmount("");
       onSuccess(result.balance);
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message);
       } else {
-        setError("Não foi possível realizar o depósito.");
+        setError(API_ERROR_MESSAGES.feedback.transferFailed);
       }
     } finally {
       setLoading(false);
@@ -46,10 +57,12 @@ export function useDepositForm({ onSuccess }: UseDepositFormOptions) {
   }
 
   return {
+    receiverEmail,
     amount,
     error,
     success,
     loading,
+    setReceiverEmail,
     setAmount,
     handleSubmit,
   };

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ApiError } from "@/lib/api";
+import { API_ERROR_MESSAGES } from "@/lib/error-catalog";
 import { transactionsService } from "@/services/transactions-service";
 
 type Feedback = {
@@ -51,7 +52,7 @@ export function useTransactionActions({
       onBalanceUpdate(result.balance);
       onFeedback({
         type: "success",
-        message: "Transação revertida com sucesso.",
+        message: API_ERROR_MESSAGES.feedback.reverseSuccess,
       });
       setPendingReverseId(null);
       await refreshTransactions();
@@ -64,7 +65,7 @@ export function useTransactionActions({
       } else {
         onFeedback({
           type: "error",
-          message: "Não foi possível reverter a transação.",
+          message: API_ERROR_MESSAGES.feedback.reverseFailed,
         });
       }
     } finally {

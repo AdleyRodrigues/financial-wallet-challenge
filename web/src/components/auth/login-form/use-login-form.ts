@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { ApiError } from "@/lib/api";
+import { API_ERROR_MESSAGES } from "@/lib/error-catalog";
 import { isValidEmail } from "@/lib/form";
 import { authService } from "@/services/auth-service";
 
@@ -21,13 +22,15 @@ export function useLoginForm() {
     const errors: { email?: string; password?: string } = {};
 
     if (!email.trim()) {
-      errors.email = "Informe seu e-mail.";
+      errors.email = API_ERROR_MESSAGES.validation.emptyEmail;
     } else if (!isValidEmail(email)) {
-      errors.email = "Informe um e-mail válido.";
+      errors.email = API_ERROR_MESSAGES.validation.invalidEmail;
     }
 
     if (!password) {
-      errors.password = "Informe sua senha.";
+      errors.password = API_ERROR_MESSAGES.validation.emptyPassword;
+    } else if (password.length < 6) {
+      errors.password = API_ERROR_MESSAGES.validation.shortPassword;
     }
 
     setFieldErrors(errors);
@@ -37,6 +40,7 @@ export function useLoginForm() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+    setFieldErrors({});
 
     if (!validate()) {
       return;
@@ -50,9 +54,12 @@ export function useLoginForm() {
       router.refresh();
     } catch (err) {
       if (err instanceof ApiError) {
+        if (err.fieldErrors) {
+          setFieldErrors((previous) => ({ ...previous, ...err.fieldErrors }));
+        }
         setError(err.message);
       } else {
-        setError("Não foi possível entrar. Tente novamente.");
+        setError(API_ERROR_MESSAGES.auth.loginFailed);
       }
     } finally {
       setLoading(false);

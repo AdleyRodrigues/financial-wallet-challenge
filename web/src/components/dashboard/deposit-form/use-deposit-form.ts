@@ -2,15 +2,15 @@
 
 import { FormEvent, useState } from "react";
 import { ApiError } from "@/lib/api";
+import { API_ERROR_MESSAGES } from "@/lib/error-catalog";
 import { parsePositiveAmount } from "@/lib/form";
 import { transactionsService } from "@/services/transactions-service";
 
-type UseTransferFormOptions = {
+type UseDepositFormOptions = {
   onSuccess: (balance: string) => void;
 };
 
-export function useTransferForm({ onSuccess }: UseTransferFormOptions) {
-  const [receiverEmail, setReceiverEmail] = useState("");
+export function useDepositForm({ onSuccess }: UseDepositFormOptions) {
   const [amount, setAmount] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -23,32 +23,23 @@ export function useTransferForm({ onSuccess }: UseTransferFormOptions) {
 
     const parsedAmount = parsePositiveAmount(amount);
 
-    if (!receiverEmail.trim()) {
-      setError("Informe o e-mail do destinatário.");
-      return;
-    }
-
     if (parsedAmount === null) {
-      setError("Informe um valor maior que zero.");
+      setError(API_ERROR_MESSAGES.validation.invalidAmount);
       return;
     }
 
     setLoading(true);
 
     try {
-      const result = await transactionsService.transfer({
-        receiverEmail: receiverEmail.trim(),
-        amount: parsedAmount,
-      });
-      setSuccess("Transferência realizada com sucesso.");
-      setReceiverEmail("");
+      const result = await transactionsService.deposit({ amount: parsedAmount });
+      setSuccess(API_ERROR_MESSAGES.feedback.depositSuccess);
       setAmount("");
       onSuccess(result.balance);
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message);
       } else {
-        setError("Não foi possível realizar a transferência.");
+        setError(API_ERROR_MESSAGES.feedback.depositFailed);
       }
     } finally {
       setLoading(false);
@@ -56,12 +47,10 @@ export function useTransferForm({ onSuccess }: UseTransferFormOptions) {
   }
 
   return {
-    receiverEmail,
     amount,
     error,
     success,
     loading,
-    setReceiverEmail,
     setAmount,
     handleSubmit,
   };

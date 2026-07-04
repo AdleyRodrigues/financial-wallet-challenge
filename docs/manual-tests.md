@@ -11,9 +11,11 @@ Guia prático para validar a solução ponta a ponta.
 - API em http://localhost:3333
 - Web em http://localhost:3000 (`pnpm dev`)
 
-Credenciais de teste sugeridas: senha `Password123!` para ambos os usuários.
+Credenciais sugeridas ao cadastrar: senha `Password123!` para ambos os usuários do roteiro abaixo.
 
 ## Fluxo Alice/Bruno
+
+Não há login padrão nem seed no banco. **Alice** e **Bruno** são personagens fictícios do roteiro — crie as duas contas em `/register` antes de começar (passos 1 e 2), ou use contas que você já tenha cadastrado com os mesmos e-mails.
 
 ### Via interface (recomendado)
 

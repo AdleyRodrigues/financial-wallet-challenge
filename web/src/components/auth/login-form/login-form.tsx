@@ -4,11 +4,11 @@ import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import NextLink from "next/link";
-import { footerTextStyles } from "@/components/auth/login-form.styles";
-import { useLoginForm } from "@/components/auth/use-login-form";
-import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { footerTextStyles } from "@/components/auth/shared/auth-form.styles";
+import { useLoginForm } from "@/components/auth/login-form/use-login-form";
+import { Alert } from "@/components/ui/alert/alert";
+import { Button } from "@/components/ui/button/button";
+import { Input } from "@/components/ui/input/input";
 
 export function LoginForm() {
   const {
