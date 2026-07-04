@@ -3,13 +3,19 @@
 import MuiAlert from "@mui/material/Alert";
 
 type AlertProps = {
-  variant?: "error" | "success" | "info";
+  variant?: "error" | "success" | "info" | "warning";
   children: React.ReactNode;
 };
 
 export function Alert({ variant = "info", children }: AlertProps) {
   const severity =
-    variant === "error" ? "error" : variant === "success" ? "success" : "info";
+    variant === "error"
+      ? "error"
+      : variant === "success"
+        ? "success"
+        : variant === "warning"
+          ? "warning"
+          : "info";
 
   return (
     <MuiAlert severity={severity} sx={{ borderRadius: 2 }}>

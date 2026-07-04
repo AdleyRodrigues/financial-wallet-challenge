@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useTransactionActions } from "@/components/dashboard/transaction-actions/use-transaction-actions";
+import { useSessionCountdown } from "@/hooks/use-session-countdown";
 import { ApiError } from "@/lib/api";
 import { API_ERROR_MESSAGES } from "@/lib/error-catalog";
 import { authService } from "@/services/auth-service";
@@ -25,6 +26,25 @@ export function useDashboardPage() {
   const [transactionsLoading, setTransactionsLoading] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
+
+  const { secondsRemaining, shouldShowWarning, isExpired } = useSessionCountdown(
+    user?.sessionExpiresAt,
+  );
+
+  const clearDashboardState = useCallback(() => {
+    setUser(null);
+    setBalance("0.00");
+    setTransactions([]);
+    setFeedback(null);
+  }, []);
+
+  useEffect(() => {
+    if (!isExpired || loggingOut) {
+      return;
+    }
+
+    router.replace("/login?reason=session-expired");
+  }, [isExpired, loggingOut, router]);
 
   const refreshTransactions = useCallback(async () => {
     setTransactionsLoading(true);
@@ -103,10 +123,7 @@ export function useDashboardPage() {
     setLoggingOut(true);
     try {
       await authService.logout();
-      setUser(null);
-      setBalance("0.00");
-      setTransactions([]);
-      setFeedback(null);
+      clearDashboardState();
       router.replace("/login");
       router.refresh();
     } catch {
@@ -127,6 +144,7 @@ export function useDashboardPage() {
     transactionsLoading,
     loggingOut,
     feedback,
+    sessionWarning: shouldShowWarning ? secondsRemaining : null,
     handleBalanceUpdate,
     handleLogout,
     ...transactionActions,

@@ -36,7 +36,8 @@ Mapeamento objetivo entre o escopo do desafio e a implementação entregue.
 | Validação de saldo | `updateMany` condicional com `balance >= amount` | Implementado |
 | Reversão | `POST /transactions/:id/reverse` | Implementado |
 | Docker | PostgreSQL via `docker-compose` | Implementado |
-| Testes unitários | `TransactionsService` spec | Implementado |
+| Testes unitários | `TransactionsService`, auth cookie e JWT strategy specs | Implementado |
+| Sessão | `JWT_EXPIRES_IN`, cookie HttpOnly, `sessionExpiresAt`, aviso 30s | Implementado |
 | Documentação | README + `docs/` | Implementado |
 
 ## Melhorias futuras
@@ -44,4 +45,5 @@ Mapeamento objetivo entre o escopo do desafio e a implementação entregue.
 - Testes de integração (API + banco + frontend)
 - Observabilidade (logs estruturados, tracing, métricas)
 - Idempotency keys em depósito, transferência e reversão
+- Rate limiting em rotas sensíveis
 - Paginação no histórico de transações

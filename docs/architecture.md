@@ -8,7 +8,7 @@ Documentação técnica consolidada do **financial-wallet-challenge**.
 
 Monólito modular full-stack: **Next.js** no frontend, **NestJS** na API, **PostgreSQL** via Docker, **Prisma** como ORM, autenticação **JWT em cookie HttpOnly** e **Material UI** para a interface.
 
-A API concentra regras financeiras; o frontend consome contratos HTTP com `credentials: "include"`.
+A API concentra regras financeiras; o frontend consome contratos HTTP com `credentials: "include"`. Em **401** (sessão inválida ou expirada), o cliente redireciona para `/login?reason=session-expired`; credenciais inválidas no login e logout manual não exibem essa mensagem. O dashboard usa `sessionExpiresAt` de `/auth/me` para um aviso preventivo nos últimos 30 segundos; o JWT continua apenas no cookie HttpOnly.
 
 ## Arquitetura geral
 
@@ -40,6 +40,34 @@ flowchart TB
   txMod --> prisma
   prisma --> postgres
 ```
+
+## Fluxo de autenticação
+
+```mermaid
+sequenceDiagram
+  participant Browser
+  participant API as NestJS API
+
+  Browser->>API: POST /auth/login
+  API->>API: bcrypt + sign JWT
+  API-->>Browser: Set-Cookie accessToken HttpOnly
+
+  Browser->>API: GET /auth/me (credentials include)
+  API->>API: JwtAuthGuard lê cookie accessToken
+  API-->>Browser: user + sessionExpiresAt
+
+  Note over Browser,API: Autenticação via cookie HttpOnly<br/>Sem header Authorization Bearer
+
+  alt cookie ausente, inválido ou expirado
+    API-->>Browser: 401 Unauthorized
+    Browser->>Browser: redirect /login?reason=session-expired
+  end
+
+  Browser->>API: POST /auth/logout
+  API-->>Browser: clearCookie accessToken
+```
+
+Cookie-only: a API lê o JWT **somente** do cookie `accessToken`; header `Authorization: Bearer` não é aceito. Expiração configurável via `JWT_EXPIRES_IN` (padrão `2h`). Dashboard exibe aviso nos últimos **30 segundos** com base em `sessionExpiresAt`.
 
 ## Modelagem de dados
 
@@ -135,12 +163,25 @@ sequenceDiagram
 | Decisão | Motivo |
 |---------|--------|
 | Monólito modular | Simplicidade operacional; módulos NestJS com responsabilidades claras |
+| TypeScript (api + web) | Contratos tipados e menor risco de erro entre camadas |
 | `Decimal` para dinheiro | Evita erros de arredondamento de ponto flutuante |
 | Transações Prisma (`$transaction`) | Atomicidade entre saldo e registro de `Transaction` |
 | `updateMany` condicional | Protege transferência e reversão contra concorrência |
 | Reversão compensatória | Preserva auditabilidade sem apagar histórico |
-| Cookie HttpOnly | JWT inacessível ao JavaScript do browser |
+| Cookie HttpOnly (cookie-only) | JWT inacessível ao JavaScript; sem `Authorization: Bearer` |
+| JWT com expiração | Sessão limitada (`JWT_EXPIRES_IN`, padrão `2h`); sem refresh token |
+| bcrypt | Hash de senha; credenciais nunca retornadas pela API |
 | Material UI | Produtividade e consistência visual no frontend |
+| Docker (PostgreSQL) | Banco padronizado para execução e avaliação |
+
+## Segurança (resumo)
+
+- JWT em cookie **`accessToken` HttpOnly**; frontend com `credentials: "include"` e **sem** token em `localStorage`/`sessionStorage`.
+- API **cookie-only** — não aceita `Authorization: Bearer`.
+- Senhas com **bcrypt**; `passwordHash` nunca exposto nas respostas.
+- Valores monetários em **`Decimal`/`Numeric`**; operações financeiras em **transações Prisma** com **update condicional** no débito.
+- **Reversão compensatória** — histórico preservado; `originalTransactionId` com restrição `@unique`.
+- **401** em rotas protegidas → frontend redireciona para `/login?reason=session-expired`.
 
 **Frontend:** componentes `.tsx` para renderização, hooks `use-*.ts` para estado/fluxo, `.styles.ts` para `SxProps` quando necessário, `services/` para HTTP.
 

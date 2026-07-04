@@ -38,7 +38,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  me(@CurrentUser() user: { id: string }) {
-    return this.authService.me(user.id);
+  me(@CurrentUser() user: { id: string; sessionExpiresAt: string }) {
+    return this.authService.me(user.id, user.sessionExpiresAt);
   }
 }

@@ -4,6 +4,7 @@ export type User = {
   email: string;
   createdAt: string;
   updatedAt: string;
+  sessionExpiresAt?: string;
 };
 
 export type AuthResponse = {

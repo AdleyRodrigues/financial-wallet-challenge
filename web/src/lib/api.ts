@@ -1,4 +1,5 @@
 import type { ApiFieldErrors } from "./api-errors";
+import { redirectToLoginOnUnauthorized } from "./auth-session";
 import { resolveApiError } from "./api-errors";
 import { API_ERROR_MESSAGES } from "./error-catalog";
 
@@ -39,6 +40,10 @@ export async function api<T>(
   }
 
   if (!response.ok) {
+    if (response.status === 401) {
+      redirectToLoginOnUnauthorized(path);
+    }
+
     const body: unknown = await response.json().catch(() => null);
     const resolvedError = resolveApiError({
       status: response.status,

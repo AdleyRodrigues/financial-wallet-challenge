@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
 import type { Response } from 'express';
 import { UsersService } from '../users/users.service';
+import { buildAuthCookieOptions, getJwtExpiresIn } from './auth-cookie.util';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 
@@ -18,6 +19,10 @@ type SafeUser = {
   email: string;
   createdAt: Date;
   updatedAt: Date;
+};
+
+type MeUser = SafeUser & {
+  sessionExpiresAt: string;
 };
 
 @Injectable()
@@ -68,25 +73,40 @@ export class AuthService {
   }
 
   logout(response: Response): { message: string } {
-    response.clearCookie('accessToken');
+    response.clearCookie('accessToken', this.getClearCookieOptions());
     return { message: 'Logout successful' };
   }
 
-  async me(userId: string): Promise<{ user: SafeUser }> {
+  async me(
+    userId: string,
+    sessionExpiresAt: string,
+  ): Promise<{ user: MeUser }> {
     const user = await this.usersService.findById(userId);
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
-    return { user: this.toSafeUser(user) };
+    return {
+      user: {
+        ...this.toSafeUser(user),
+        sessionExpiresAt,
+      },
+    };
   }
 
   private setAuthCookie(response: Response, token: string): void {
-    response.cookie('accessToken', token, {
-      httpOnly: true,
-      secure: this.configService.get('NODE_ENV') === 'production',
-      sameSite: 'lax',
-      maxAge: 1000 * 60 * 60 * 24,
-    });
+    response.cookie('accessToken', token, this.getAuthCookieOptions());
+  }
+
+  private getAuthCookieOptions() {
+    return buildAuthCookieOptions(
+      getJwtExpiresIn(this.configService.get<string>('JWT_EXPIRES_IN')),
+      this.configService.get('NODE_ENV') === 'production',
+    );
+  }
+
+  private getClearCookieOptions() {
+    const { httpOnly, secure, sameSite } = this.getAuthCookieOptions();
+    return { httpOnly, secure, sameSite };
   }
 
   private toSafeUser(user: User): SafeUser {

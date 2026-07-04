@@ -17,6 +17,7 @@ import { TransactionHistory } from "@/components/dashboard/transaction-history/t
 import { TransferForm } from "@/components/dashboard/transfer-form/transfer-form";
 import { Alert } from "@/components/ui/alert/alert";
 import { Loading } from "@/components/ui/loading/loading";
+import { API_ERROR_MESSAGES } from "@/lib/error-catalog";
 
 export default function DashboardPage() {
   const {
@@ -27,6 +28,7 @@ export default function DashboardPage() {
     transactionsLoading,
     loggingOut,
     feedback,
+    sessionWarning,
     pendingReverseId,
     reversingId,
     handleBalanceUpdate,
@@ -53,6 +55,12 @@ export default function DashboardPage() {
             onLogout={handleLogout}
             loggingOut={loggingOut}
           />
+
+          {sessionWarning !== null ? (
+            <Alert variant="warning">
+              {API_ERROR_MESSAGES.dashboard.sessionExpiringWarning(sessionWarning)}
+            </Alert>
+          ) : null}
 
           {feedback ? (
             <Alert variant={feedback.type === "success" ? "success" : "error"}>

@@ -34,10 +34,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
       exception instanceof HttpException ? exception.getResponse() : null;
 
     const message = this.extractMessage(exceptionResponse, exception);
+    const safeMessage = this.toClientMessage(status, message);
 
     const body: ErrorResponse = {
       statusCode: status,
-      message,
+      message: safeMessage,
       error: HttpStatus[status] ?? 'Error',
       path: request.url,
       timestamp: new Date().toISOString(),
@@ -78,5 +79,18 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
 
     return 'Internal server error';
+  }
+
+  private toClientMessage(
+    status: number,
+    message: string | string[],
+  ): string | string[] {
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    if (isProduction && status >= Number(HttpStatus.INTERNAL_SERVER_ERROR)) {
+      return 'Internal server error';
+    }
+
+    return message;
   }
 }

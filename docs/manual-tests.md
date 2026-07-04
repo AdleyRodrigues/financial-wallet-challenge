@@ -54,8 +54,11 @@ Com cookies salvos (`curl -c` / `-b`):
 | Cadastro cria User + Wallet (saldo 0) | ☐ |
 | Login define cookie HttpOnly | ☐ |
 | Rotas privadas retornam 401 sem sessão | ☐ |
+| Cookie-only: Bearer no header não autentica | ☐ |
+| Logout limpa cookie e redireciona para `/login` | ☐ |
 | Depósito aumenta saldo | ☐ |
 | Transferência debita/credita corretamente | ☐ |
 | Destinatário não reverte transferência recebida | ☐ |
 | Remetente reverte transferência enviada | ☐ |
 | Reversão duplicada bloqueada | ☐ |
+| Aviso de sessão nos últimos 30s (opcional) | ☐ |

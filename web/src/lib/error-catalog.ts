@@ -2,6 +2,8 @@ export const API_ERROR_MESSAGES = {
   auth: {
     invalidCredentials: "E-mail ou senha incorretos.",
     sessionExpired: "Sessão expirada. Faça login novamente.",
+    sessionExpiredLogin:
+      "Sua sessão expirou. Faça login novamente para continuar.",
     loginFailed: "Não foi possível entrar. Tente novamente.",
     registerFailed: "Não foi possível criar a conta. Tente novamente.",
     registerSuccess: "Conta criada com sucesso. Redirecionando para o login...",
@@ -45,6 +47,8 @@ export const API_ERROR_MESSAGES = {
   dashboard: {
     refreshTransactionsFailed: "Não foi possível atualizar o histórico de transações.",
     logoutFailed: "Não foi possível sair. Tente novamente.",
+    sessionExpiringWarning: (secondsRemaining: number) =>
+      `Por segurança, sua sessão será encerrada em ${secondsRemaining} segundos.`,
   },
   feedback: {
     depositSuccess: "Depósito realizado com sucesso.",
