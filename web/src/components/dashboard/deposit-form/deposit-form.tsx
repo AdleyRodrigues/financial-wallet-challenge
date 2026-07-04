@@ -1,5 +1,6 @@
 "use client";
 
+import Savings from "@mui/icons-material/Savings";
 import Stack from "@mui/material/Stack";
 import { useDepositForm } from "@/components/dashboard/deposit-form/use-deposit-form";
 import { Alert } from "@/components/ui/alert/alert";
@@ -18,6 +19,7 @@ export function DepositForm({ onSuccess }: DepositFormProps) {
   return (
     <Card
       title="Depositar"
+      titleIcon={<Savings fontSize="small" />}
       description="Adicione fundos à sua carteira de forma instantânea."
     >
       <Stack component="form" spacing={2} onSubmit={handleSubmit} noValidate>
@@ -27,14 +29,21 @@ export function DepositForm({ onSuccess }: DepositFormProps) {
         <Input
           label="Valor (R$)"
           name="amount"
-          type="number"
-          slotProps={{ htmlInput: { min: 0.01, step: 0.01 } }}
+          type="text"
+          inputMode="decimal"
+          autoComplete="off"
           placeholder="0,00"
           value={amount}
           onChange={(event) => setAmount(event.target.value)}
         />
 
-        <Button type="submit" variant="contained" fullWidth loading={loading}>
+        <Button
+          type="submit"
+          variant="contained"
+          fullWidth
+          loading={loading}
+          loadingLabel="Depositando..."
+        >
           Depositar
         </Button>
       </Stack>

@@ -11,6 +11,7 @@ import {
   subtitleStyles,
 } from "@/components/dashboard/dashboard-header/dashboard-header.styles";
 import { Button } from "@/components/ui/button/button";
+import { BrandMark } from "@/components/ui/brand-mark/brand-mark";
 import type { User } from "@/types/auth";
 
 type DashboardHeaderProps = {
@@ -27,9 +28,12 @@ export function DashboardHeader({
   return (
     <Stack spacing={2} sx={headerStackStyles}>
       <Box>
-        <Typography variant="body2" color="primary" sx={subtitleStyles}>
-          Carteira digital
-        </Typography>
+        <Stack direction="row" spacing={1} sx={{ mb: 1, alignItems: "center" }}>
+          <BrandMark showTitle={false} size="sm" />
+          <Typography variant="body2" color="primary" sx={subtitleStyles}>
+            Carteira digital
+          </Typography>
+        </Stack>
         <Typography variant="h4" component="h1" sx={greetingStyles}>
           Olá, {user.name.split(" ")[0]}
         </Typography>
@@ -43,6 +47,7 @@ export function DashboardHeader({
         color="inherit"
         onClick={onLogout}
         loading={loggingOut}
+        loadingLabel="Saindo..."
         sx={logoutButtonStyles}
       >
         Sair

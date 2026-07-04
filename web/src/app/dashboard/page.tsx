@@ -46,7 +46,7 @@ export default function DashboardPage() {
 
   return (
     <Box component="main" sx={mainStyles}>
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3 } }}>
         <Stack spacing={4}>
           <DashboardHeader
             user={user}

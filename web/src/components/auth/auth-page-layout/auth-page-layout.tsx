@@ -8,13 +8,11 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import NextLink from "next/link";
 import {
-  brandIconStyles,
-  brandRowStyles,
-  brandTitleStyles,
   formPaperStyles,
   headerStackStyles,
   pageMainStyles,
 } from "@/components/auth/auth-page-layout/auth-page-layout.styles";
+import { BrandMark } from "@/components/ui/brand-mark/brand-mark";
 
 type AuthPageLayoutProps = {
   title: string;
@@ -29,13 +27,10 @@ export function AuthPageLayout({
 }: AuthPageLayoutProps) {
   return (
     <Box component="main" sx={pageMainStyles}>
-      <Container maxWidth="sm">
+      <Container maxWidth="sm" sx={{ px: { xs: 2, sm: 3 } }}>
         <Stack spacing={3} sx={headerStackStyles}>
           <Link component={NextLink} href="/" underline="none" color="primary">
-            <Stack spacing={1} sx={brandRowStyles}>
-              <Box sx={brandIconStyles}>C</Box>
-              <Typography sx={brandTitleStyles}>Carteira Digital</Typography>
-            </Stack>
+            <BrandMark />
           </Link>
           <Typography variant="h4" component="h1">
             {title}

@@ -21,6 +21,17 @@ export const descriptionStyles: SxProps<Theme> = {
   fontWeight: 600,
 };
 
+export const descriptionRowStyles: SxProps<Theme> = {
+  mt: 0.5,
+  alignItems: "flex-start",
+};
+
+export const typeIconStyles: SxProps<Theme> = {
+  color: "text.secondary",
+  mt: 0.25,
+  flexShrink: 0,
+};
+
 export const counterpartyStyles: SxProps<Theme> = {
   mt: 0.5,
 };

@@ -13,26 +13,6 @@ export const headerStackStyles: SxProps<Theme> = {
   textAlign: "center",
 };
 
-export const brandRowStyles: SxProps<Theme> = {
-  flexDirection: "row",
-  alignItems: "center",
-};
-
-export const brandIconStyles: SxProps<Theme> = {
-  width: 32,
-  height: 32,
-  borderRadius: 2,
-  bgcolor: "primary.main",
-  color: "primary.contrastText",
-  display: "grid",
-  placeItems: "center",
-  fontWeight: 700,
-};
-
-export const brandTitleStyles: SxProps<Theme> = {
-  fontWeight: 600,
-};
-
 export const formPaperStyles: SxProps<Theme> = {
   p: { xs: 3, sm: 4 },
   borderRadius: 3,

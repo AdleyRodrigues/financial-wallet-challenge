@@ -40,15 +40,21 @@ export function LoginForm() {
       <Input
         label="Senha"
         name="password"
-        type="password"
         autoComplete="current-password"
         placeholder="••••••••"
         value={password}
         onChange={(event) => setPassword(event.target.value)}
         errorMessage={fieldErrors.password}
+        showPasswordToggle
       />
 
-      <Button type="submit" variant="contained" fullWidth loading={loading}>
+      <Button
+        type="submit"
+        variant="contained"
+        fullWidth
+        loading={loading}
+        loadingLabel="Entrando..."
+      >
         Entrar
       </Button>
 

@@ -10,17 +10,19 @@ import {
   chipRowStyles,
   counterpartyStyles,
   dateStyles,
+  descriptionRowStyles,
   descriptionStyles,
   getAmountStyles,
   listItemStyles,
+  typeIconStyles,
 } from "@/components/dashboard/transaction-item/transaction-item.styles";
 import {
-  DIRECTION_LABELS,
   formatTransactionDate,
   getTransactionDescription,
   STATUS_LABELS,
   TYPE_LABELS,
 } from "@/components/dashboard/transaction-item/transaction-item.utils";
+import { TransactionTypeIcon } from "@/components/dashboard/transaction-item/transaction-type-icon";
 import { Button } from "@/components/ui/button/button";
 import { formatCurrency } from "@/lib/currency";
 import type { Transaction } from "@/types/transaction";
@@ -44,28 +46,33 @@ export function TransactionItem({
       <Box sx={{ flex: 1, minWidth: 0 }}>
         <Stack spacing={1} sx={chipRowStyles}>
           <Chip label={TYPE_LABELS[transaction.type]} size="small" />
-          <Chip
-            label={STATUS_LABELS[transaction.status]}
-            size="small"
-            color={transaction.status === "COMPLETED" ? "success" : "warning"}
-            variant="outlined"
-          />
-          <Chip
-            label={DIRECTION_LABELS[transaction.direction]}
-            size="small"
-            variant="outlined"
-          />
+          {transaction.status === "REVERSED" ? (
+            <Chip
+              label={STATUS_LABELS[transaction.status]}
+              size="small"
+              color="warning"
+              variant="outlined"
+            />
+          ) : null}
         </Stack>
 
-        <Typography sx={descriptionStyles}>
-          {getTransactionDescription(transaction)}
-        </Typography>
+        <Stack direction="row" spacing={1} sx={descriptionRowStyles}>
+          <TransactionTypeIcon
+            transaction={transaction}
+            fontSize="small"
+            sx={typeIconStyles}
+            aria-hidden
+          />
+          <Typography sx={descriptionStyles}>
+            {getTransactionDescription(transaction)}
+          </Typography>
+        </Stack>
         {transaction.counterpartyEmail ? (
           <Typography variant="body2" color="text.secondary" sx={counterpartyStyles}>
             {transaction.counterpartyEmail}
           </Typography>
         ) : null}
-        <Typography variant="caption" color="text.disabled" sx={dateStyles}>
+        <Typography variant="caption" color="text.secondary" sx={dateStyles}>
           {formatTransactionDate(transaction.createdAt)}
         </Typography>
       </Box>
@@ -82,6 +89,7 @@ export function TransactionItem({
             color="error"
             size="small"
             loading={reversing}
+            loadingLabel="Revertendo..."
             onClick={() => onReverseRequest(transaction.id)}
           >
             Reverter

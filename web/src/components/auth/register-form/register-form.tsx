@@ -54,15 +54,22 @@ export function RegisterForm() {
       <Input
         label="Senha"
         name="password"
-        type="password"
         autoComplete="new-password"
-        placeholder="Mínimo 6 caracteres"
+        placeholder="••••••••"
         value={password}
         onChange={(event) => setPassword(event.target.value)}
         errorMessage={fieldErrors.password}
+        helperText="Mínimo 6 caracteres"
+        showPasswordToggle
       />
 
-      <Button type="submit" variant="contained" fullWidth loading={loading}>
+      <Button
+        type="submit"
+        variant="contained"
+        fullWidth
+        loading={loading}
+        loadingLabel="Criando conta..."
+      >
         Criar conta
       </Button>
 

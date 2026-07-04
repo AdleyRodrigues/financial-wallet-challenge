@@ -66,5 +66,65 @@ export const theme = createTheme({
         },
       },
     },
+    MuiTextField: {
+      defaultProps: {
+        variant: "outlined",
+        size: "medium",
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#0f172a",
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#334155",
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#475569",
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#22c55e",
+            borderWidth: 1,
+          },
+          "&.Mui-focused": {
+            boxShadow: "0 0 0 1px #22c55e",
+          },
+          "&.Mui-disabled": {
+            opacity: 0.6,
+          },
+        },
+        input: {
+          padding: "14px 14px",
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: "#94a3b8",
+          "&.Mui-focused": {
+            color: "#22c55e",
+          },
+        },
+      },
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          color: "#94a3b8",
+          marginTop: 6,
+          "&.Mui-error": {
+            color: "#f87171",
+          },
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          padding: 8,
+        },
+      },
+    },
   },
 });

@@ -1,5 +1,6 @@
 "use client";
 
+import Send from "@mui/icons-material/Send";
 import Stack from "@mui/material/Stack";
 import { useTransferForm } from "@/components/dashboard/transfer-form/use-transfer-form";
 import { Alert } from "@/components/ui/alert/alert";
@@ -26,6 +27,7 @@ export function TransferForm({ onSuccess }: TransferFormProps) {
   return (
     <Card
       title="Transferir"
+      titleIcon={<Send fontSize="small" />}
       description="Envie valores para outro usuário pelo e-mail cadastrado."
     >
       <Stack component="form" spacing={2} onSubmit={handleSubmit} noValidate>
@@ -45,14 +47,21 @@ export function TransferForm({ onSuccess }: TransferFormProps) {
         <Input
           label="Valor (R$)"
           name="amount"
-          type="number"
-          slotProps={{ htmlInput: { min: 0.01, step: 0.01 } }}
+          type="text"
+          inputMode="decimal"
+          autoComplete="off"
           placeholder="0,00"
           value={amount}
           onChange={(event) => setAmount(event.target.value)}
         />
 
-        <Button type="submit" variant="contained" fullWidth loading={loading}>
+        <Button
+          type="submit"
+          variant="contained"
+          fullWidth
+          loading={loading}
+          loadingLabel="Transferindo..."
+        >
           Transferir
         </Button>
       </Stack>

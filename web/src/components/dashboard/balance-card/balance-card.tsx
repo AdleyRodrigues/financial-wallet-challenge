@@ -1,7 +1,9 @@
 "use client";
 
+import AccountBalanceWallet from "@mui/icons-material/AccountBalanceWallet";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import {
   balanceHintStyles,
@@ -22,9 +24,12 @@ export function BalanceCard({ balance }: BalanceCardProps) {
 
   return (
     <Paper elevation={0} sx={paperStyles}>
-      <Typography variant="overline" color="text.secondary" sx={overlineStyles}>
-        Saldo disponível
-      </Typography>
+      <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+        <AccountBalanceWallet fontSize="small" color="primary" aria-hidden />
+        <Typography variant="overline" color="text.secondary" sx={overlineStyles}>
+          Saldo disponível
+        </Typography>
+      </Stack>
       <Typography
         variant="h3"
         component="p"

@@ -11,12 +11,6 @@ export const STATUS_LABELS: Record<Transaction["status"], string> = {
   REVERSED: "Revertida",
 };
 
-export const DIRECTION_LABELS: Record<Transaction["direction"], string> = {
-  IN: "Entrada",
-  OUT: "Saída",
-  NEUTRAL: "Neutro",
-};
-
 export function formatTransactionDate(value: string) {
   return new Intl.DateTimeFormat("pt-BR", {
     dateStyle: "short",
