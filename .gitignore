@@ -1,0 +1,29 @@
+node_modules
+dist
+.env
+.env.local
+.env.*.local
+coverage
+.next
+*.log
+pnpm-debug.log*
+
+api/node_modules
+web/node_modules
+api/.env
+web/.env.local
+
+api/dist
+
+# Manual API test artifacts (curl cookies / temp JSON bodies)
+cookies-*.txt
+login.json
+login-*.json
+reg.json
+invalid-login.json
+
+# npm lockfile inside pnpm workspace package (use pnpm-lock.yaml only)
+api/package-lock.json
+
+# Cursor IDE (skills, config local — não versionar)
+.cursor/

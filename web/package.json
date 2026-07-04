@@ -1,0 +1,10 @@
+{
+  "name": "web",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "node -e \"console.log('[web] Frontend not implemented yet'); setInterval(() => {}, 2147483647)\"",
+    "build": "node -e \"console.log('[web] Frontend not implemented yet')\"",
+    "lint": "node -e \"console.log('[web] Frontend not implemented yet')\""
+  }
+}
