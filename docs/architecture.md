@@ -56,7 +56,7 @@ sequenceDiagram
   API->>API: JwtAuthGuard lê cookie accessToken
   API-->>Browser: user + sessionExpiresAt
 
-  Note over Browser,API: Autenticação via cookie HttpOnly<br/>Sem header Authorization Bearer
+  Note over Browser,API: Cookie HttpOnly only, sem Authorization Bearer
 
   alt cookie ausente, inválido ou expirado
     API-->>Browser: 401 Unauthorized
@@ -76,12 +76,15 @@ erDiagram
   User ||--|| Wallet : owns
   Wallet ||--o{ Transaction : sends
   Wallet ||--o{ Transaction : receives
-  Transaction ||--o| Transaction : "reversal of"
+  Transaction ||--o| Transaction : reversal_of
 
   User {
     uuid id PK
+    string name
     string email UK
     string passwordHash
+    datetime createdAt
+    datetime updatedAt
   }
 
   Wallet {

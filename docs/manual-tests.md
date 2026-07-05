@@ -62,3 +62,5 @@ Com cookies salvos (`curl -c` / `-b`):
 | Remetente reverte transferência enviada | ☐ |
 | Reversão duplicada bloqueada | ☐ |
 | Aviso de sessão nos últimos 30s (opcional) | ☐ |
+
+**Expiração de sessão (temporário):** use `JWT_EXPIRES_IN=1m` em `api/.env`, reinicie a API, faça login e aguarde o aviso nos últimos 30 segundos. Restaure `2h` (ou remova a linha) antes de commitar — não versione esse valor de teste.

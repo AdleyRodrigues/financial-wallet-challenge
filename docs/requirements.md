@@ -20,7 +20,7 @@ Mapeamento objetivo entre o escopo do desafio e a implementação entregue.
 - Persistência PostgreSQL com Prisma e migrations
 - Operações financeiras atômicas
 - Proteção contra concorrência em débitos
-- Testes unitários das regras de transação
+- Testes unitários para regras financeiras, utilitários de autenticação/cookie e estratégia JWT
 - Frontend integrado à API real
 - Documentação objetiva para execução e revisão
 
