@@ -33,6 +33,7 @@ export function BalanceCard({ balance }: BalanceCardProps) {
       <Typography
         variant="h3"
         component="p"
+        data-testid="dashboard-balance"
         sx={getBalanceAmountStyles(isNegative)}
       >
         {formatCurrency(balance)}

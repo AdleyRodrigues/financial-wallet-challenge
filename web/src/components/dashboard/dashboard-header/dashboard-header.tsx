@@ -45,6 +45,7 @@ export function DashboardHeader({
       <Button
         variant="outlined"
         color="inherit"
+        data-testid="logout-button"
         onClick={onLogout}
         loading={loggingOut}
         loadingLabel="Saindo..."

@@ -1,26 +1,23 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
+import type { App } from 'supertest/types';
+import { PrismaService } from '../src/prisma/prisma.service';
+import { cleanupE2eData, createE2eApp } from './e2e-support';
 
-describe('AppController (e2e)', () => {
+describe('Auth smoke (e2e)', () => {
   let app: INestApplication<App>;
 
-  beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    await app.init();
+  beforeAll(async () => {
+    app = await createE2eApp();
+    await cleanupE2eData(app.get(PrismaService));
   });
 
-  it('/auth/me (GET) should require authentication', () => {
-    return request(app.getHttpServer()).get('/auth/me').expect(401);
-  });
-
-  afterEach(async () => {
+  afterAll(async () => {
+    await cleanupE2eData(app.get(PrismaService));
     await app.close();
+  });
+
+  it('GET /auth/me requires authentication', async () => {
+    await request(app.getHttpServer()).get('/auth/me').expect(401);
   });
 });

@@ -57,6 +57,7 @@ export function ReverseConfirmationDialog({
           disabled={loading}
           color="error"
           variant="contained"
+          data-testid="reverse-confirm-button"
           aria-busy={loading}
         >
           {loading ? (

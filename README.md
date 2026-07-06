@@ -98,6 +98,7 @@ Copie `api/.env.example` → `api/.env` e `web/.env.example` → `web/.env.local
 | Variável | Pacote | Descrição |
 |----------|--------|-----------|
 | `DATABASE_URL` | api | Conexão PostgreSQL |
+| `DATABASE_URL_TEST` | api | Banco usado pelos testes e2e/integration (fallback para `DATABASE_URL`) |
 | `JWT_SECRET` | api | Segredo do JWT |
 | `JWT_EXPIRES_IN` | api | Expiração do JWT e do cookie (padrão: `2h`) |
 | `PORT` | api | Porta da API (padrão: `3333`) |
@@ -112,6 +113,9 @@ Copie `api/.env.example` → `api/.env` e `web/.env.example` → `web/.env.local
 | `pnpm build` | Build de `api/` e `web/` |
 | `pnpm lint` | ESLint nos dois pacotes |
 | `pnpm test` | Testes unitários da API |
+| `pnpm test:e2e:api` | Testes de integração da API (Nest real + Supertest + cookies) |
+| `pnpm test:e2e:web` | Fluxo crítico web com Playwright |
+| `pnpm test:e2e` | Executa API e2e + Web e2e |
 | `pnpm db:migrate` | Aplica migrations (`migrate deploy`) |
 | `pnpm db:migrate:dev` | Nova migration em desenvolvimento |
 | `pnpm db:studio` | Prisma Studio |
@@ -140,8 +144,27 @@ Detalhes e diagramas: [docs/architecture.md](docs/architecture.md).
 
 ## Testes
 
-- **Unitários:** 22 testes na API (`TransactionsService`, utilitários de cookie e estratégia JWT) — `pnpm test`. Sem testes de integração/e2e nesta entrega.
+- **Unitários:** 22 testes na API (`TransactionsService`, utilitários de cookie e estratégia JWT) — `pnpm test`.
+- **Integração/e2e:** fluxo financeiro com API real (Supertest + cookies) e fluxo crítico no browser (Playwright) — `pnpm test:e2e`.
 - **Manuais:** fluxo Alice/Bruno em [docs/manual-tests.md](docs/manual-tests.md).
+
+### Testes e2e/integrados
+
+Com o PostgreSQL rodando:
+
+```bash
+docker compose up -d postgres
+pnpm db:migrate
+pnpm test:e2e
+```
+
+Na primeira execução do Playwright, instale o Chromium:
+
+```bash
+pnpm --filter web test:e2e:install
+```
+
+A suíte e2e valida o fluxo principal da API e o fluxo crítico no browser: cadastro, login, depósito, transferência, histórico e reversão compensatória.
 
 ## Documentação complementar
 
@@ -151,7 +174,6 @@ Detalhes e diagramas: [docs/architecture.md](docs/architecture.md).
 
 ## Melhorias futuras
 
-- Testes de integração end-to-end (API + banco + frontend)
 - Observabilidade (logs estruturados, métricas)
 - Idempotency keys em operações financeiras
 - Rate limiting em rotas sensíveis (auth e transações)

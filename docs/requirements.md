@@ -20,7 +20,8 @@ Mapeamento objetivo entre o escopo do desafio e a implementação entregue.
 - Persistência PostgreSQL com Prisma e migrations
 - Operações financeiras atômicas
 - Proteção contra concorrência em débitos
-- Testes unitários para regras financeiras, utilitários de autenticação/cookie e estratégia JWT
+- Testes unitários das regras de negócio e autenticação
+- Testes de integração/e2e para API e fluxo web crítico
 - Frontend integrado à API real
 - Documentação objetiva para execução e revisão
 
@@ -37,12 +38,13 @@ Mapeamento objetivo entre o escopo do desafio e a implementação entregue.
 | Reversão | `POST /transactions/:id/reverse` | Implementado |
 | Docker | PostgreSQL via `docker-compose` | Implementado |
 | Testes unitários | `TransactionsService`, auth cookie e JWT strategy specs | Implementado |
+| Testes integração/e2e | Supertest (API real) + Playwright (fluxo crítico web) | Implementado |
+| Server Actions | Não utilizado; API NestJS separada do frontend | Não aplicável |
 | Sessão | `JWT_EXPIRES_IN`, cookie HttpOnly, `sessionExpiresAt`, aviso 30s | Implementado |
 | Documentação | README + `docs/` | Implementado |
 
 ## Melhorias futuras
 
-- Testes de integração (API + banco + frontend)
 - Observabilidade (logs estruturados, tracing, métricas)
 - Idempotency keys em depósito, transferência e reversão
 - Rate limiting em rotas sensíveis

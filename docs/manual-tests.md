@@ -47,6 +47,18 @@ Com cookies salvos (`curl -c` / `-b`):
 9. `GET /wallet` — Alice `100.00`, Bruno `0.00`.
 10. Repetir reversão → **400**.
 
+## Testes automatizados (opcional)
+
+Com Docker e migrations aplicadas:
+
+```bash
+pnpm test:e2e:api
+pnpm --filter web test:e2e:install   # primeira vez
+pnpm test:e2e:web
+```
+
+Ou tudo junto: `pnpm test:e2e`.
+
 ## Checklist rápido
 
 | Cenário | OK? |
